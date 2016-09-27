@@ -3,7 +3,7 @@
 # Container
 
 ACCOUNT=""
-CONTAINER="helloworld"
+CONTAINER="hellojava"
 VERSION="latest"
 
 # Shell Variables
