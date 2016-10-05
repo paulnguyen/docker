@@ -9,6 +9,8 @@ VERSION="latest"
 # Shell Variables
 
 OPT=""
+OPT1=""
+OPT2=""
 DEBUG="TRUE"
 AUTH="FALSE"
 XMENU="N"
@@ -207,7 +209,7 @@ do
 	echo "[6] push       - Push Build to Docker Hub   " ;
 	echo "[7] ps         - Show Running Containers    " ;
 	echo "[8] rmi        - Remove Container Image     " ;
-	echo "[9] release    - Push Version to DockerHub  " ;	
+	echo "[9] release    - Release to Docker Hub      " ;	
 	if [ "$XMENU" = "N" ] ; then
 		echo " "
 		echo "[+] More Options                        " ;
@@ -240,8 +242,8 @@ do
 		9|release)		echo " " ; docker_release ;	okay_pause ;;
 		i|I|install) 	echo " " ; docker_install ; okay_pause ;;
 		u|U|uninstall)	echo " " ; docker_uninstall ; okay_pause ;;
-		r|R|restart) 	echo " " ; docker_restart ; echo "Connector Instance Restarted!" ; okay_pause ;;
-		s|S|stop) 		echo " " ; docker_stop ; echo "Connector Instance Stopped!" ; okay_pause ;;
+		r|R|restart) 	echo " " ; docker_restart ; echo "Container Restarted!" ; okay_pause ;;
+		s|S|stop) 		echo " " ; docker_stop ; echo "Container Stopped!" ; okay_pause ;;
 		c|C|cleanup) 	echo " " ; docker_stop_all; docker_rmi_all ; okay_pause ;;
 		v|V|version) 	echo " " ; set_version ; okay_pause ;;
 		a|A|account) 	echo " " ; set_account ; okay_pause ;;
