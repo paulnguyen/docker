@@ -6,5 +6,11 @@ build:
 images:
 	docker images
 
+ps:
+	docker ps -a
+
 run:
-	docker run hellojava
+	docker run --name hellojava hellojava  
+
+clean:
+	docker rm hellojava
