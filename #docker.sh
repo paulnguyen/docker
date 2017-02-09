@@ -63,6 +63,18 @@ docker_build() {
     fi ; 
 }
 
+docker_beta() {
+	if [ "$AUTH" != "TRUE" ] ; 
+    then echo "Login Required!" ; 
+    else 
+  		echo "Building Versions: beta and $VERSION"
+ 	  	docker build -t $ACCOUNT/$CONTAINER:beta -t $ACCOUNT/$CONTAINER:$VERSION .
+ 	  	echo "Pushing Builds to Docker Hub"
+ 	  	docker push $ACCOUNT/$CONTAINER:beta ; 
+ 	  	docker push $ACCOUNT/$CONTAINER:$VERSION ; 
+    fi ; 
+}
+
 docker_release() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
@@ -217,12 +229,13 @@ do
 	echo "[6] push       - Push Build to Docker Hub   " ;
 	echo "[7] ps         - Show Running Containers    " ;
 	echo "[8] rmi        - Remove Container Image     " ;
-	echo "[9] release    - Release to Docker Hub      " ;	
 	if [ "$XMENU" = "N" ] ; then
 		echo " "
 		echo "[+] More Options                        " ;
 	else
 		echo " "
+		echo "[b] beta       - Beta push Docker Hub      " ;	
+		echo "[r] release    - Release to Docker Hub     " ;	
 		echo "[i] install    - Install Container         " ;
 		echo "[u] uninstall  - Uninstall Container       " ;
 		echo "[r] restart    - Restart Container         " ;
@@ -247,7 +260,8 @@ do
 		6|push) 		echo " " ; docker_push ; okay_pause ;;
 		7|ps) 			echo " " ; docker_ps ; okay_pause ;;
 		8|rmi) 			echo " " ; docker_stop ; docker_rmi ; okay_pause ;;
-		9|release)		echo " " ; docker_release ;	okay_pause ;;
+		b|beta)			echo " " ; docker_beta ; okay_pause ;;
+		r|release)		echo " " ; docker_release ;	okay_pause ;;
 		i|I|install) 	echo " " ; docker_install ; okay_pause ;;
 		u|U|uninstall)	echo " " ; docker_uninstall ; okay_pause ;;
 		r|R|restart) 	echo " " ; docker_restart ; echo "Container Restarted!" ; okay_pause ;;
