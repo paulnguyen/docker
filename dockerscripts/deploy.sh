@@ -13,7 +13,6 @@ OPT1=""
 OPT2=""
 DEBUG="TRUE"
 AUTH="FALSE"
-XMENU="N"
 
 ## Set Echo Command Flavor
 
@@ -34,9 +33,8 @@ docker_auth () {
    $PROMPT "Docker Userid:   \c" ; read user ;
    $PROMPT "Docker Password: \c" ; read -s pass ; 
    echo "" ;
-   #docker login -u $user -p $pass
-   #TMP=`cat ~/.docker/config.json | grep  \"auth\": | wc -l | sed -e 's/^[ \t]*//'`
-   TMP=`docker login -u $user -p $pass | grep Succeeded | wc -l | sed -e 's/^[ \t]*//'`
+   docker login -u $user -p $pass
+   TMP=`docker login -u $user -p $pass 2>/dev/null | grep Succeeded | wc -l | sed -e 's/^[ \t]*//'`
    #echo ".${TMP}."
    if [ "$TMP" == "1" ] ; 
    then 
@@ -51,48 +49,8 @@ docker_pull() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
     else 
-    	docker pull -a $ACCOUNT/$CONTAINER ; 
-    	#docker pull $ACCOUNT/$CONTAINER:$VERSION ; 
-    fi ; 
-}
-
-docker_build() {
-	if [ "$AUTH" != "TRUE" ] ; 
-    then echo "Login Required!" ; 
-    else 
- 	  	docker build -t $ACCOUNT/$CONTAINER:$VERSION .
-    fi ; 
-}
-
-docker_beta() {
-	if [ "$AUTH" != "TRUE" ] ; 
-    then echo "Login Required!" ; 
-    else 
-  		echo "Building Versions: beta and $VERSION"
- 	  	docker build -t $ACCOUNT/$CONTAINER:beta -t $ACCOUNT/$CONTAINER:$VERSION .
- 	  	echo "Pushing Builds to Docker Hub"
- 	  	docker push $ACCOUNT/$CONTAINER:beta ; 
- 	  	docker push $ACCOUNT/$CONTAINER:$VERSION ; 
-    fi ; 
-}
-
-docker_release() {
-	if [ "$AUTH" != "TRUE" ] ; 
-    then echo "Login Required!" ; 
-    else 
-  		echo "Building Versions: latest and $VERSION"
- 	  	docker build -t $ACCOUNT/$CONTAINER:latest -t $ACCOUNT/$CONTAINER:$VERSION .
- 	  	echo "Pushing Builds to Docker Hub"
- 	  	docker push $ACCOUNT/$CONTAINER:latest ; 
- 	  	docker push $ACCOUNT/$CONTAINER:$VERSION ; 
-    fi ; 
-}
-
-docker_push() { 
-	if [ "$AUTH" != "TRUE" ] ; 
-    then echo "Login Required!" ; 
-    else 
-		docker push $ACCOUNT/$CONTAINER:$VERSION ; 
+    	#docker pull -a $ACCOUNT/$CONTAINER ; 
+    	docker pull $ACCOUNT/$CONTAINER:$VERSION ; 
     fi ; 
 }
 
@@ -100,7 +58,7 @@ docker_run() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
     else 
-		docker run -dt --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
+		docker run -td -p 8080:8080 --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
     fi ; 
 }
 
@@ -132,14 +90,11 @@ docker_rmi_all() {
 	done
 }
 
-docker_rmi_all_2 () {
-	docker rmi -f $(docker images -q)
-}
 
 docker_ps() {
 	echo "Running Containers:"
 	echo " "
-	docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t"
+	docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\t"
 }
 
 docker_restart() {
@@ -147,8 +102,8 @@ docker_restart() {
 }
 
 docker_stop() {
-	docker stop $CONTAINER
-	docker rm $CONTAINER
+	docker stop $CONTAINER > /dev/null 2>&1
+	docker rm $CONTAINER > /dev/null 2>&1
 }
 
 docker_stop_all () {
@@ -160,11 +115,6 @@ docker_stop_all () {
  		docker rm $INST_ID > /dev/null 2>&1
 		INST_ID=`docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t" | tr -s ' ' | tr ' ' '|' | cut -f 2 -d '|' | tail -n +2 | head -1`
 	done	
-}
-
-docker_stop_all_2 () {
-	docker stop $(docker ps -a -q)
-	docker rm -f $(docker ps -a -q)	
 }
 
 
@@ -218,64 +168,50 @@ do
 	clear
 	echo ""
 	echo "============================================" ;
-	echo "          D O C K E R   M E N U             " ;
+	echo "        D O C K E R    D E P L O Y          " ;
 	echo "============================================" ;
 	echo "> $CONTAINER - $ACCOUNT/$CONTAINER:$VERSION " ;
 	echo " "
 	echo "[1] login      - Login to Docker            " ;
 	echo "[2] images     - Show Docker Images         " ;
-	echo "[3] build      - Build Container Image      " ;
-	echo "[4] run        - Run Container              " ;
-	echo "[5] pull       - Pull Container Image       " ;
-	echo "[6] push       - Push Build to Docker Hub   " ;
-	echo "[7] ps         - Show Running Containers    " ;
-	echo "[8] rmi        - Remove Container Image     " ;
-	if [ "$XMENU" = "N" ] ; then
-		echo " "
-		echo "[+] More Options                        " ;
-	else
-		echo " "
-		echo "[b] beta       - Beta push Docker Hub      " ;	
-		echo "[r] release    - Release to Docker Hub     " ;	
-		echo "[i] install    - Install Container         " ;
-		echo "[u] uninstall  - Uninstall Container       " ;
-		echo "[r] restart    - Restart Container         " ;
-		echo "[s] stop       - Stop Running Container    " ;
-		echo "[b] bash       - Enter Container Shell     " ;
-		echo "[c] cleanup    - Remove Local Images       " ;
-		echo "[v] version    - Set Container Version     " ;
-		echo "[a] account    - Set Container Account     " ;
-		echo " " 
-		echo "[-] Fewer Options                          " ;		
-	fi ;
-	echo "[X] Exit Menu                              " ;
+	echo "[3] run        - Run Container              " ;
+	echo "[4] pull       - Pull Container Image       " ;
+	echo "[5] ps         - Show Running Containers    " ;
+	echo "[6] rmi        - Remove Container Image     " ;
+	echo " "
+	echo "[i] install    - Install Container          " ;
+	echo "[u] uninstall  - Uninstall Container        " ;
+	echo "[r] restart    - Restart Container          " ;
+	echo "[b] boot       - Start Container            " ;
+	echo "[s] stop       - Stop Running Container     " ;
+	echo "[b] bash       - Enter Container Shell      " ;
+	echo "[c] cleanup    - Remove Local Images        " ;
+	echo "[v] version    - Set Container Version      " ;
+	echo "[a] account    - Set Container Account      " ;
+	echo " " 
+	echo "[X] Exit Menu                               " ;
 	echo " "
 	$PROMPT "Selection: \c"
 	read OPT OPT1 OPT2
 	case $OPT in
 		1|login)		echo " " ; docker_auth ; okay_pause ;;
 		2|images)	    echo " " ; docker_images ; okay_pause ;;
-		3|build)		echo " " ; docker_build ; okay_pause ;;
-		4|run) 			echo " " ; docker_run ; okay_pause ;;
-		5|pull)			echo " " ; docker_pull ; okay_pause ;;
-		6|push) 		echo " " ; docker_push ; okay_pause ;;
-		7|ps) 			echo " " ; docker_ps ; okay_pause ;;
-		8|rmi) 			echo " " ; docker_stop ; docker_rmi ; okay_pause ;;
-		b|beta)			echo " " ; docker_beta ; okay_pause ;;
-		r|release)		echo " " ; docker_release ;	okay_pause ;;
+		3|run) 			echo " " ; docker_run ; okay_pause ;;
+		4|pull)			echo " " ; docker_pull ; okay_pause ;;
+		5|ps) 			echo " " ; docker_ps ; okay_pause ;;
+		6|rmi) 			echo " " ; docker_stop ; docker_rmi ; okay_pause ;;
 		i|I|install) 	echo " " ; docker_install ; okay_pause ;;
 		u|U|uninstall)	echo " " ; docker_uninstall ; okay_pause ;;
 		r|R|restart) 	echo " " ; docker_restart ; echo "Container Restarted!" ; okay_pause ;;
+		b|B|boot) 		echo " " ; docker_run ; echo "Container Started!" ; okay_pause ;;
 		s|S|stop) 		echo " " ; docker_stop ; echo "Container Stopped!" ; okay_pause ;;
-		c|C|cleanup) 	echo " " ; docker_stop_all ; docker_rmi_all ; okay_pause ;;
+		c|C|cleanup) 	echo " " ; docker_stop_all; docker_rmi_all ; okay_pause ;;
 		v|V|version) 	echo " " ; set_version ; okay_pause ;;
 		a|A|account) 	echo " " ; set_account ; okay_pause ;;
 		cmd)			echo " " ; docker_cmd ; okay_pause ;;
         debug)          echo " " ; if [ "$OPT1" = "" -o "$OPT1" = "on" ] ; then DEBUG="TRUE" ; echo "Debug ON" ; 
 								   else DEBUG="FALSE" ; echo "Debug OFF" ; fi ; okay_pause ;;
 		b|B|bash)		clear ; docker exec -it $CONTAINER bash ; ;;
- 		+)				XMENU="Y" ;;
-		-)				XMENU="N" ;;
 		x|X) 			clear ; OPT="X" ; echo "Exiting " ;; 
 	esac
 done
