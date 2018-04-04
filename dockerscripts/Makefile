@@ -1,6 +1,6 @@
 
-container = <container name>
-network = <network name>
+# container = <container name>
+# network = <network name>
 
 up:
 	docker-compose up -d

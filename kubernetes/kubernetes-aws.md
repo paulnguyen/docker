@@ -8,17 +8,17 @@
 	 |_|\_\__,_|_.__/ \___|_|  |_| |_|\___|\__\___||___/
 	                                                    
                                                                                         
-                                                    
 
-# Kubernetes Getting Started
+# Kubernetes on AWS EC2 Instances
 
-	http://kubernetes.io/docs/
+* https://kubernetes.io/docs/getting-started-guides/aws/ 
+
+# Kubernetes on AWS EKS - Managed Kubernetes Services
+
+* https://aws.amazon.com/eks/
+
+# Kubernetes Primer - Docker Cloud Introduction
+
+* https://docs.docker.com/docker-cloud/migration/kube-primer/
 
 
-# References
-
-    https://www.docker.com/
-    https://kubernetes.io
-                                                             
-
-    
