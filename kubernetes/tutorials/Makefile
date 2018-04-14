@@ -1,4 +1,8 @@
 
+##
+## Kubernetes Basics & Minikube
+##
+
 start:
 	minikube start 
 
@@ -52,6 +56,10 @@ help-container-logs:
 help-container-cmd:
 	kubectl exec --help
 
+##
+## Kubernetes 101	
+##
+
 create-pod:
 	kubectl create -f pod-nginx.yaml
 
@@ -73,6 +81,10 @@ create-redis:
 delete-redis:
 	kubectl delete pod redis
 
+##
+## Kubernetes 201	
+##	
+
 create-labeled-pod:
 	kubectl create -f pod-labels.yaml
 
@@ -82,9 +94,34 @@ list-labeled-pod:
 delete-labeled-pod:
 	kubectl delete pod -l app=nginx
 
+deployment-create:
+	kubectl create -f deployment.yaml
 
+deployment-list:
+	kubectl get deployment
 
+deployment-pods:
+	kubectl get pods -l app=nginx
 
+deployment-upgrade:
+	kubectl apply -f deployment-update.yaml
+
+deployment-delete:
+	kubectl delete deployment nginx-deployment
+
+service-create:
+	kubectl create -f service.yaml
+
+service-list:
+	kubectl get services
+
+service-ip:
+	export SERVICE_IP=$(kubectl get service nginx-service -o go-template='{{.spec.clusterIP}}')
+	export SERVICE_PORT=$(kubectl get service nginx-service -o go-template='{{(index .spec.ports 0).port}}')
+	echo "$SERVICE_IP:$SERVICE_PORT"
+
+service-delete:
+	kubectl delete service nginx-service
 
 
 
