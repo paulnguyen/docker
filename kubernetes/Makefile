@@ -21,10 +21,12 @@ docker-env:
 	minikube docker-env
 
 docker-set:
-	echo "eval $(minikube docker-env)"
+	# Run this:
+	# eval $(minikube docker-env)
 	
 docker-unset:
-	echo "eval $(minikube docker-env -u)"
+	# Run this:
+	# eval $(minikube docker-env -u)
 
 docker-images:
 	docker images
@@ -49,6 +51,46 @@ help-container-logs:
 
 help-container-cmd:
 	kubectl exec --help
+
+create-pod:
+	kubectl create -f pod-nginx.yaml
+
+get-pod:
+	kubectl get pod nginx
+
+pod-shell:
+	kubectl exec -it nginx -- /bin/bash
+
+list-pods:
+	kubectl get pods
+
+delete-pod:
+	kubectl delete pod nginx
+
+create-redis:
+	kubectl create -f pod-redis.yaml
+
+delete-redis:
+	kubectl delete pod redis
+
+create-labeled-pod:
+	kubectl create -f pod-labels.yaml
+
+list-labeled-pod:
+	kubectl get pods -l app=nginx
+
+delete-labeled-pod:
+	kubectl delete pod -l app=nginx
+
+
+
+
+
+
+
+
+
+
 
 
 
