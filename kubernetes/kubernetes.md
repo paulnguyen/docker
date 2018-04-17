@@ -66,3 +66,18 @@
 
 * https://kubernetes.io/docs/tools/
 
+# Kubernetes on AWS EC2 Instances
+
+* https://kubernetes.io/docs/getting-started-guides/aws/ 
+
+# Kubernetes on AWS EKS - Managed Kubernetes Services
+
+* https://aws.amazon.com/eks/
+
+# Kubernetes Primer - Docker Cloud Introduction
+
+* https://docs.docker.com/docker-cloud/migration/kube-primer/
+
+
+
+
