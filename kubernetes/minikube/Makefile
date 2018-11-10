@@ -1,6 +1,6 @@
 
 ##
-## Kubernetes 
+## Kubernetes (Minikube)
 ##
 
 start:
@@ -9,6 +9,9 @@ start:
 stop:
 	minikube stop
 
+config:
+	kubectl config view
+	
 api:
 	kubectl proxy --port=8080 
 
@@ -43,9 +46,19 @@ docker-images:
 
 deploy-list:
 	kubectl get deployments
-
-
 	
+# kubectl get pods my-pod -o jsonpath --template={.status.podIP}
+# kubectl describe <resource-name> <obj-name>
+# kubectl apply -f obj.yaml
+# kubectl edit <resource-name> <obj-name>
+# kubectl delete -f obj.yaml
+# kubectl label pods bar color=red
+# kubectl label pods bar color-
+# kubectl logs <pod-name>
+# kubectl exec -it <pod-name> -- bash
+# kubectl help
+# kubectl help command-name
+
 
 
 
