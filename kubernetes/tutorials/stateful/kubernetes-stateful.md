@@ -9,7 +9,7 @@
 	                                                    
                                                                                         
 
-# Kubernetes Stateless Application
+# Kubernetes Stateful Application
 
 * https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
 * https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/

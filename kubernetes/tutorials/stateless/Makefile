@@ -1,13 +1,7 @@
 
 ##
-## Kubernetes 
+## Kubernetes Stateless
 ##
-
-start:
-	minikube start 
-
-stop:
-	minikube stop
 
 list:
 	kubectl get pods
@@ -18,22 +12,8 @@ list-all:
 cluster:
 	kubectl cluster-info
 
-gui:
-	minikube dashboard
-
 nodes:
 	kubectl get nodes
-
-docker-env:
-	minikube docker-env
-
-docker-set:
-	# Run this:
-	# eval $(minikube docker-env)
-	
-docker-unset:
-	# Run this:
-	# eval $(minikube docker-env -u)
 
 docker-images:
 	docker images
@@ -87,7 +67,7 @@ redis-slaves:
 	kubectl apply -f redis-slave-deployment.yaml
 
 redis-delete:
-	kubectl delete deployment -l app=redis
+	kubectl delete deployment redis-master 	
 	kubectl delete service -l app=redis
 
 
