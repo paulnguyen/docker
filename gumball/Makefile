@@ -30,6 +30,21 @@ tomcat-run:
 tomcat-shell:
 	docker exec -it tomcat bash 
 
+tomcat-commit:
+	docker commit $(container) paulnguyen/gumball-tomcat:7.0.92
+
+tomcat-push:
+	docker push paulnguyen/gumball-tomcat:7.0.92
+
+mysql-commit:
+	docker commit $(container) paulnguyen/gumball-mysql:5.5
+
+mysql-push:
+	docker push paulnguyen/gumball-mysql:5.5
+
+docker-login:
+	docker login -u paulnguyen
+
 docker-clean: clean
 	docker rmi mysql
 	docker rmi tomcat
