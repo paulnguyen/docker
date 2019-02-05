@@ -36,12 +36,6 @@ tomcat-commit:
 tomcat-push:
 	docker push paulnguyen/gumball-tomcat:7.0.92
 
-mysql-commit:
-	docker commit $(container) paulnguyen/gumball-mysql:5.5
-
-mysql-push:
-	docker push paulnguyen/gumball-mysql:5.5
-
 docker-login:
 	docker login -u paulnguyen
 
@@ -54,6 +48,27 @@ docker-ps:
 
 docker-ps-ports:
 	 docker ps --all --format "table {{.Names}}\t{{.Ports}}\t"
+
+compose-up:
+	docker-compose up 
+
+compose-down:
+	docker-compose down 	
+
+mysql-up:
+	docker-compose up -d mysql
+
+tomcat-up:
+	docker-compose scale tomcat=2 
+
+mysql-compose-shell:
+	docker exec -it gumball_mysql_1 bash
+
+tomcat-compose-shell-1:
+	docker exec -it gumball_tomcat_1 bash
+
+tomcat-compose-shell-2:
+	docker exec -it gumball_tomcat_2 bash
 
 
 
