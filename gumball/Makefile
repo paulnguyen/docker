@@ -36,6 +36,18 @@ tomcat-commit:
 tomcat-push:
 	docker push paulnguyen/gumball-tomcat:7.0.92
 
+mysql-commit:
+	docker commit $(container) paulnguyen/gumball-mysql:5.5
+
+mysql-push:
+	docker push paulnguyen/gumball-mysql:5.5
+
+tomcat-run2:
+	docker run -d --name tomcat -v /tmp:/tmp --network gumball -td -p 8080:8080 paulnguyen/gumball-tomcat:7.0.92 
+
+mysql-run2:
+	docker run -d --name mysql --network gumball -td -p 3306:3306  paulnguyen/gumball-mysql:5.5
+
 docker-login:
 	docker login -u paulnguyen
 
