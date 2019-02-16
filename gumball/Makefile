@@ -61,8 +61,14 @@ docker-ps:
 docker-ps-ports:
 	 docker ps --all --format "table {{.Names}}\t{{.Ports}}\t"
 
-compose-up:
-	docker-compose up 
+compose-network:
+	docker network create --driver bridge gumball_network
+
+compose-up-nolb:
+	docker-compose scale tomcat=2 mysql=1
+
+compose-up-lb:
+	docker-compose scale proxy=1 tomcat=2 mysql=1
 
 compose-down:
 	docker-compose down 	
