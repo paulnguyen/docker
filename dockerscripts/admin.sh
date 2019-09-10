@@ -39,7 +39,7 @@ docker_rmi() {
 }
 
 docker_rmi_all() {
-	IMG_ID=`docker images --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}" | tr -s ' ' | tr ' ' '|' | cut -f 1 -d '|' | tail -n +2 | head -1`
+	IMG_ID=`docker images --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}" | grep -v "k8s" | tr -s ' ' | tr ' ' '|' | cut -f 1 -d '|' | tail -n +2 | head -1`
 	while [ "$IMG_ID" != "" ]
 	do
 		echo "Removing Image: $IMG_ID"
