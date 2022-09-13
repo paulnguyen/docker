@@ -38,15 +38,15 @@ docker-clean-all:
 	docker rmi $(docker images -q)
 
 docker-run:
-	docker run --name $(container) -td $(container)
+	docker run --platform=linux/amd64 --name $(container) -td $(container)
 	docker ps
 
 docker-run-host:
-	docker run --name $(container) -td --net=host $(container)
+	docker run --platform=linux/amd64 --name $(container) -td --net=host $(container)
 	docker ps
 
 docker-run-bridge:
-	docker run --name $(container) -td -p 80:8080 $(container)
+	docker run --platform=linux/amd64 --name $(container) -td -p 80:8080 $(container)
 	docker ps
 
 docker-network:

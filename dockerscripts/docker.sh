@@ -60,7 +60,7 @@ docker_build() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
     else 
- 	  	docker build -t $ACCOUNT/$CONTAINER:$VERSION .
+ 	  	docker build --platform=linux/amd64 -t $ACCOUNT/$CONTAINER:$VERSION .
     fi ; 
 }
 
@@ -69,7 +69,7 @@ docker_beta() {
     then echo "Login Required!" ; 
     else 
   		echo "Building Versions: beta and $VERSION"
- 	  	docker build -t $ACCOUNT/$CONTAINER:beta -t $ACCOUNT/$CONTAINER:$VERSION .
+ 	  	docker build --platform=linux/amd64 -t $ACCOUNT/$CONTAINER:beta -t $ACCOUNT/$CONTAINER:$VERSION .
  	  	echo "Pushing Builds to Docker Hub"
  	  	docker push $ACCOUNT/$CONTAINER:beta ; 
  	  	docker push $ACCOUNT/$CONTAINER:$VERSION ; 
@@ -81,7 +81,7 @@ docker_release() {
     then echo "Login Required!" ; 
     else 
   		echo "Building Versions: latest and $VERSION"
- 	  	docker build -t $ACCOUNT/$CONTAINER:latest -t $ACCOUNT/$CONTAINER:$VERSION .
+ 	  	docker build --platform=linux/amd64 -t $ACCOUNT/$CONTAINER:latest -t $ACCOUNT/$CONTAINER:$VERSION .
  	  	echo "Pushing Builds to Docker Hub"
  	  	docker push $ACCOUNT/$CONTAINER:latest ; 
  	  	docker push $ACCOUNT/$CONTAINER:$VERSION ; 
@@ -100,7 +100,7 @@ docker_run() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
     else 
-		docker run -dt --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
+		docker run -dt --platform=linux/amd64 --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
     fi ; 
 }
 

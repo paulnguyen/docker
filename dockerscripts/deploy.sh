@@ -58,7 +58,7 @@ docker_run() {
 	if [ "$AUTH" != "TRUE" ] ; 
     then echo "Login Required!" ; 
     else 
-		docker run -td -p 8080:8080 --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
+		docker run -td -p 8080:8080 --platform=linux/amd64 --name $CONTAINER $ACCOUNT/$CONTAINER:$VERSION ; 
     fi ; 
 }
 
